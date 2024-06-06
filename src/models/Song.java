@@ -1,29 +1,30 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Song{
-    private int songId;
-    private String name;
-    private Artist artist;
-    private int length;
+    private int songID = 9999;
+    private String name = "";
+    private models.Artist artist;
+    private int length = 1;
 
-    public Song(int songId, String name, Artist artist) {
-        this.songId = validateSongId(songId);
-        this.name = validateSongName(name);
-        this.artist = artist;
-        this.length = 1;
-
+    public Song(int songID, String name, String artistName, boolean isVerified, int length) {
+        this.songID = (songID >= 1000 && songID <= 9999) ? songID : 9999;
+        this.name = (name.length() <= 20) ? name : name.substring(0, 20);
+        this.artist = new models.Artist(artistName, isVerified);
+        this.length = (length >= 1 && length <= 600) ? length : 1;
     }
 
     public int getSongId() {
-        return songId;
+        return songID;
     }
 
-    public void setSongId(int songId) {
-        this.songId = validateSongId(songId);
+    public void setSongID(int songID) {
+        if (songID >= 1000 && songID <= 9999) {
+            this.songID = songID;
+        }
     }
-
     public String getName() {
         return name;
     }
@@ -45,9 +46,10 @@ public class Song{
     }
 
     public void setLength(int length) {
-        this.length = validateLength(length);
+        if(length >= 1 && length <=600){
+            this.length = length;
+        }
     }
-
     private int validateSongId(int songId){
         if (songId >= 1000 && songId <=9999){
             return songId;
@@ -73,24 +75,37 @@ public class Song{
             return 1;
         }
     }
-    public boolean equals(Object thing){
-        if (this == thing)
-            return true;
-        Song song = (Song) thing;
-        return songId == song.songId;
+
+    public void setSongId(int newSongId) {
+        if (newSongId >= 1000 && newSongId <= 9999) {
+            this.songID = newSongId;
+        }
+        else if (newSongId > 9999) {
+            this.songID = 9999;
+        }
+        else {
+            this.songID = 1000;
+        }
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Song song = (Song) o;
+        return songID == song.songID && length == song.length && Objects.equals(name, song.name) && Objects.equals(artist, song.artist);
     }
 
 
 
-    public String toString(){
-        return "Song Id: " + songId + "\n" +
-                "Song Name: " + name + "\n" +
-                "Artist Name: " + artist.getName() + "\n" +
-                "Verified Artist: " + (artist.isVerified() ? "Yes" : "No") + "\n" +
-                "Length of Song (seconds): " + length + "\n";
+    public String toString()
+    {
+        return "Song description: " + name
+                + ", songID: " + songID
+                + ", artist: " + artist.toString()
+                + ", length: " + length;
     }
 
-    public static class Artist {
+    /*public static class Artist {
         private String name;
         private boolean verified;
         private Object artistName;
@@ -162,6 +177,6 @@ public class Song{
             songStore.deleteSong(1500);
             songStore.displayAllSongs();
         }
+*/
 
-    }
 }

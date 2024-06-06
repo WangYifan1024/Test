@@ -1,4 +1,5 @@
 import controllers.Playlist;
+import models.Artist;
 import models.Song;
 import utils.ScannerInput;
 import com.thoughtworks.xstream.XStream;
@@ -30,7 +31,7 @@ public class Driver {
     private Playlist playlist;
 
     public Driver() {
-        this.playlist = new Playlist();
+        this.playlist = new Playlist("Chill-24", "Chillout songs to study to");
         load(); // Load data from XML file when Driver is instantiated
         displayMenu();
     }
@@ -116,12 +117,13 @@ public class Driver {
     private void addSong() {
         int songId = ScannerInput.readNextInt("Enter the Song Id:");
         String name = ScannerInput.readNextLine("Enter the Name:");
+        String artistName = ScannerInput.readNextLine("Enter the ArtistName:");
         boolean verified = false;
         if (ScannerInput.readNextChar("If it is verified") == 'y'){
             verified = true;
         }
-        Song.Artist artist = new Song.Artist(ScannerInput.readNextLine("Enter the ArtistName:"),verified);
-        boolean isAdded = playlist.addSong(new Song(songId, name, artist));
+        int length = ScannerInput.readNextInt("Enter the Length:");
+        boolean isAdded = playlist.addSong(new Song(songId, name, artistName, verified, length));
     }
 
     private void displayAllSongs() {
@@ -137,7 +139,7 @@ public class Driver {
         if (ScannerInput.readNextChar("If it is verified") == 'y') {
             verified = true;
         }
-        Song.Artist artist = new Song.Artist(ScannerInput.readNextLine("Enter the ArtistName:"), verified);
+        Artist artist = new Artist(ScannerInput.readNextLine("Enter the ArtistName:"), verified);
         for (Song song : playlist.getSongs()) {
             if (song.getSongId() == songId) {
                 song.setName(newName);
@@ -149,13 +151,14 @@ public class Driver {
     private void updateSongbyIndex() {
         int songId = ScannerInput.readNextInt("Enter the ID");
         String newName = ScannerInput.readNextLine("Enter the Newname");
+        String artistName = ScannerInput.readNextLine("Enter the ArtistName:");
         boolean verified = false;
         if (ScannerInput.readNextChar("If it is verified") == 'y') {
             verified = true;
         }
-        Song.Artist artist = new Song.Artist(ScannerInput.readNextLine("Enter the ArtistName:"), verified);
+        int length = ScannerInput.readNextInt("Enter the Length:");
         int index = ScannerInput.readNextInt("Enter the Index");
-        playlist.updateSong(index,new Song(songId,newName,artist));
+        playlist.updateSong(index,new Song(songId, newName, artistName, verified, length));
     }
 
     private void deleteSongs() {

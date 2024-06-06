@@ -12,9 +12,36 @@ public class Playlist {
     private String description = ""; // valid length is 30 - default to the first 30 characters of input.
     private int likes = 0;
 
-    public Playlist() {
+    public Playlist(String playlistName, String description) {
         this.playlistName = Utilities.truncateString(playlistName, 20);
         this.description = Utilities.truncateString(description, 30);
+    }
+
+    public String listSongs() {
+        if (songs.isEmpty()) {
+            return "No songs in playlist.";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < songs.size(); i++) {
+            Song song = songs.get(i);
+            sb.append(i).append(":\t")
+                    .append("Songs from playlist :\t")
+                    .append("playlistName is: ").append(playlistName).append("\t")
+                    .append("Song Id is : ").append(song.getSongId()).append("\t")
+                    .append("Song Name is : ").append(song.getName()).append("\t")
+                    .append("Artist Name is : ").append(song.getArtist().getArtistName()).append("\t")
+                    .append("Song Length is : ").append(song.getLength()).append("\t")
+                    .append("Artist verified is : ").append(song.getArtist().isVerified()).append("\n");
+        }
+        return sb.toString();
+    }
+
+    public int numSongs() {
+        return songs.size();
+    }
+
+    public void setSongs(ArrayList<Song> songs) {
+        this.songs = songs;
     }
 
     public String getPlaylistName() {
@@ -30,14 +57,17 @@ public class Playlist {
     }
 
     public void setDescription(String description) {
-        this.description = Utilities.truncateString(description, 30);
+        if (description.length() <= 30)
+            this.description = description;
     }
 
     public void setPlaylistName(String playlistName) {
-        this.playlistName = Utilities.truncateString(playlistName, 20);
+        if (playlistName.length() <= 20)
+            this.playlistName = playlistName;
     }
 
     public void setLikes(int likes) {
+        if (likes >= 0)
         this.likes = likes;
     }
 
@@ -142,7 +172,7 @@ public class Playlist {
             if (songs.isEmpty()) {
                 return "No songs in playlist.";
             } else {
-                return "There are no songs on this playlist longer than " + length + " seconds.";
+                return "There are no songs on this playlist longer than :" + length + " secs.";
             }
         }
     }
@@ -152,7 +182,7 @@ public class Playlist {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < songs.size(); i++) {
             Song song = songs.get(i);
-            if (song.getArtist().getName().equalsIgnoreCase(artistName)) {
+            if (song.getArtist().getArtistName().equalsIgnoreCase(artistName)) {
                 sb.append(i).append(": ").append(song).append("\n");
                 songsByArtistPresent = true;
             }
@@ -163,7 +193,7 @@ public class Playlist {
             if (songs.isEmpty()) {
                 return "No songs in playlist.";
             } else {
-                return "There are no songs on this playlist by '" + artistName + "'.";
+                return "There are no  songs on this playlist by'" + artistName + "'.";
             }
         }
     }
@@ -193,7 +223,7 @@ public class Playlist {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < songs.size(); i++) {
             Song song = songs.get(i);
-            if (song.getArtist().getName().toLowerCase().contains(artistName.toLowerCase())) {
+            if (song.getArtist().getArtistName().toLowerCase().contains(artistName.toLowerCase())) {
                 sb.append(i).append(": ").append(song).append("\n");
                 songsFound = true;
             }
@@ -221,4 +251,18 @@ public class Playlist {
         }
         return null;
     }
+
+    public String toString() {
+        if (songs.isEmpty()) {
+            return "No songs in playlist.";
+        }
+        return  "controllers.Playlist Name" +
+                playlistName + "\n" +
+                "controllers.Playlist Description" +
+                description + "\n" +
+                "Songs" + songs + "\n" +
+                "Number of songs: " + songs.size() + "\n" +
+                "Likes: " + likes;
+    }
+
 }

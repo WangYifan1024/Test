@@ -11,19 +11,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SongTest {
     private Song validSong1, validSong2, validSong3, validSong4, invalidSong1, invalidSong2;
-    private Song.Artist artist1, artist2;
+    private Artist artist1, artist2;
 
     @BeforeEach
     void setUp() {
-        artist1 = new Song.Artist("Rema", true);
-        artist2 = new Song.Artist("Taylor Swift", false);
+        validSong1 = new Song(1500, "Anti-Hero", "Taylor Swift", true,  123);
+        validSong2 = new Song(9999, "Calm Down", "Rema", false, 600);
+        validSong3 = new Song(1000, "12345678901234567890", "123456789012345", true, 1);
+        validSong4 = new Song(998, "", "", true, 599);
+        invalidSong1 = new Song(999, "12345678901234567890123", "12345678901234567", false, 0);
+        invalidSong2 = new Song(998, "12345678901234567890123567890", "12345678901234567890", false, -1);
 
-        validSong1 = new Song(1500, "Anti-Hero", artist1);
-        validSong2 = new Song(9999, "Calm Down", artist2);
-        validSong3 = new Song(1000, "12345678901234567890", artist1);
-        validSong4 = new Song(998, "", artist2);
-        invalidSong1 = new Song(999, "12345678901234567890123", artist1);
-        invalidSong2 = new Song(998, "12345678901234567890123567890", artist2);
+        artist1 = new Artist("1234567890123", true);
+        artist2 = new Artist("12345", false);
     }
 
 
@@ -39,14 +39,14 @@ public class SongTest {
         @Test
         void constructorTestingTheSettingOfDefaultValues() {
             //testing invalid values (lower boundary) for each variable at constructor level
-            Song lowerBounds = new Song(999, "", new Song.Artist("`", true));
+            Song lowerBounds = new Song(999, "", "", true, 0);
             Artist songArtistLower = new Artist("", true);
             assertEquals(9999, lowerBounds.getSongId());
             assertEquals("", lowerBounds.getName());  //
             assertEquals(songArtistLower, lowerBounds.getArtist());
 
             assertEquals(1, lowerBounds.getLength());
-            Song upperBounds = new Song(10000, "123456789012345678901", new Song.Artist("1234567890123456", true));
+            Song upperBounds = new Song(10000, "123456789012345678901", "1234567890123456", true, 601);
             //testing invalid values (upper boundary) for each variable at constructor level
             Artist songArtistUpper = new Artist("1234567890123456", true);
             assertEquals(9999, upperBounds.getSongId());
@@ -58,7 +58,7 @@ public class SongTest {
         @Test
         void constructorTestingValidValues() {
             //testing for values that lie on the lower boundary.
-            Song lowerBounds = new Song(1000, "", new Song.Artist("", true));
+            Song lowerBounds = new Song(1000, "", "", true, 1);
             assertEquals(1000, lowerBounds.getSongId());
             assertEquals("", lowerBounds.getName());  // exactly 20 chars
             assertEquals(new Artist("", true), lowerBounds.getArtist());
@@ -66,7 +66,7 @@ public class SongTest {
             // models.Song
 
             //testing for values that lie on the upper boundary.
-            Song upperBounds = new Song(9999, "12345678901234567890", new Song.Artist("123456789012345", true));
+            Song upperBounds = new Song(9999, "12345678901234567890", "123456789012345", true, 600);
             assertEquals(9999, upperBounds.getSongId());
             assertEquals("12345678901234567890", upperBounds.getName());  // exactly 20 chars
 
@@ -135,17 +135,17 @@ public class SongTest {
         }
         @Test
         void songArtistGetAndSetWorkingCorrectly() {
-            Song artistSong1 = new Song(1500, "Cool song name", new Song.Artist((String) artist1.getArtistName(), artist1.isVerified()));
-             assertEquals(artist1, artistSong1.getArtist());
-             artistSong1.setArtist(artist2);
-             assertEquals(artist2, artistSong1.getArtist());
+            Song artistSong1 = new Song(1500, "Cool song name", artist1.getArtistName(), artist1.isVerified(), 15);
+            assertEquals(artist1, artistSong1.getArtist());
+            artistSong1.setArtist(artist2);
+            assertEquals(artist2, artistSong1.getArtist());
 
         }
 
     }
     @Nested
     class ToString {
-//  validSong1 = new models.Song(1500, "Anti-Hero", "Taylor Swift", true,  123);
+        //  validSong1 = new models.Song(1500, "Anti-Hero", "Taylor Swift", true,  123);
         @Test
         void toStringContainsAllFieldsInObject() {
             //  validSong1 = new models.Song(1500, "Anti-Hero", "Taylor Swift", true,  123);
@@ -164,6 +164,6 @@ public class SongTest {
 
 
         }
-}
+    }
 }
 

@@ -8,6 +8,9 @@ public class Artist {
         if (artistName != null && artistName.length() > 15){
             this.artistName = artistName.substring(0,15);
         }
+        else {
+            this.artistName = artistName;
+        }
         this.verified = verified;
     }
 
@@ -29,8 +32,8 @@ public class Artist {
     }
 
     public void setArtistName(String artistName) {
-        if (artistName != null && artistName.length() > 15){
-            this.artistName = artistName.substring(0,15);
+        if (artistName.length() <= 15){
+            this.artistName = artistName;
         }
     }
 
@@ -52,7 +55,7 @@ public class Artist {
     }
     //TODO Add a generated equals method.
     public String toString(){
-        return artistName + " is " + (verified ? "" : "not") + "a verified artist";
+        return artistName + " is " + (verified ? "" : "not ") + "a verified artist";
     }
 
     //TODO The toString should return the string in this format:
